@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace LostTech.LargeCollections
 {
-    public sealed unsafe class Array<T> : IDisposable where T : unmanaged
+    public sealed unsafe class Array<T> : IEnumerable<T>, IDisposable where T : unmanaged
     {
         private T* _buffer;
         /// <summary>Number of elements in the array</summary>
@@ -13,6 +15,8 @@ namespace LostTech.LargeCollections
         public Array(nuint length)
         {
             if (length == 0) return;
+            if (length == unchecked((nuint)(-1)))
+                throw new ArgumentOutOfRangeException(nameof(length));
 
             long size = checked(Marshal.SizeOf<T>() * (nint)length);
             _buffer = (T*)Marshal.AllocHGlobal((IntPtr)size);
@@ -77,6 +81,16 @@ namespace LostTech.LargeCollections
             long size = checked(Marshal.SizeOf<T>() * (nint)Length);
             GC.RemoveMemoryPressure(size);
         }
+
+        /// <inheritdoc/>
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (nuint index = 0; index < Length; index++)
+            {
+                yield return UnsafeRef(index);
+            }
+        }
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         ~Array()
         {

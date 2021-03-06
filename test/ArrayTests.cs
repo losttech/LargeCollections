@@ -78,6 +78,14 @@ namespace Memory
             Assert.Equal(size, arr.Length);
         }
 
+        [Fact]
+        public void TooLarge()
+        {
+            ArgumentOutOfRangeException? error = Assert.Throws<ArgumentOutOfRangeException>(
+                () => new Array<byte>(unchecked((nuint)(-1))));
+            Assert.Equal("length", error.ParamName);
+        }
+
         nuint LargeSize
         {
             get
