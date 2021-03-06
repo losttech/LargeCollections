@@ -19,6 +19,8 @@ namespace LostTech.LargeCollections
             Length = length;
             GC.AddMemoryPressure(size);
         }
+        // TODO: currently, the buffer is assumed to be owned by the instance,
+        // and it will be disposed using Marshal.FreeHGlobal.
         internal Array(T* buffer, nuint length)
         {
             _buffer = buffer;

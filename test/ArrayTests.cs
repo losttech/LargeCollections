@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 using LostTech.LargeCollections;
 
@@ -66,6 +67,15 @@ namespace Memory
             var arr = new Array<int>(42);
             arr.Dispose();
             arr.Dispose();
+        }
+
+        [Fact]
+        public unsafe void FromPointerAndSize_Check()
+        {
+            const uint size = 13;
+            int* buffer = (int*)Marshal.AllocHGlobal(new IntPtr(Marshal.SizeOf<int>() * size));
+            using var arr = new Array<int>(buffer, size);
+            Assert.Equal(size, arr.Length);
         }
 
         nuint LargeSize
