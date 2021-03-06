@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
     <IsPackable>false</IsPackable>
 
     <RootNamespace>LostTech.LargeCollections</RootNamespace>

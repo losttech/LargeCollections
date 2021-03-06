@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
     <!-- Package stuff -->
     <VersionPrefix>0.0.2</VersionPrefix>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>

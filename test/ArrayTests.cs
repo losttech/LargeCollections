@@ -90,7 +90,9 @@ namespace Memory
         {
             get
             {
+#pragma warning disable RCS1118 // https://github.com/dotnet/roslyn/issues/51714
                 uint uintMax = uint.MaxValue;
+#pragma warning restore RCS1118 // Re-enable: Mark local variable as const.
                 return uintMax + (nuint)2;
             }
         }
