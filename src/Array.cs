@@ -45,6 +45,20 @@ namespace LostTech.LargeCollections
         /// </para>
         /// </summary>
         public ref T UnsafeRef(nuint index) => ref Unsafe.AsRef<T>(_buffer + index);
+        /// <summary>
+        /// Returns a reference, that points to the element at the specified index.
+        ///
+        /// <para>
+        /// If the <see cref="Array{T}"/> is disposed or garbage collected, or
+        /// if the <paramref name="index"/> is out of bounds, the returned
+        /// reference will be/become invalid.
+        /// </para>
+        ///
+        /// <para>
+        /// Accessing invalid reference is undefined behavior.
+        /// </para>
+        /// </summary>
+        public ref T UnsafeRef(NIndex index) => ref Unsafe.AsRef<T>(_buffer + index.GetOffset(Length));
 
         /// <summary>
         /// Gets or sets element at the specified index. Checks bounds.
@@ -66,6 +80,14 @@ namespace LostTech.LargeCollections
 
                 UnsafeRef(index) = value;
             }
+        }
+        /// <summary>
+        /// Gets or sets element at the specified index. Checks bounds.
+        /// </summary>
+        public T this[NIndex index]
+        {
+            get => this[index.GetOffset(Length)];
+            set => this[index.GetOffset(Length)] = value;
         }
 
         /// <inheritdoc/>
