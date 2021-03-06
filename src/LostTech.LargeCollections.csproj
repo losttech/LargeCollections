@@ -1,13 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 
     <!-- Package stuff -->
+    <VersionPrefix>0.0.1</VersionPrefix>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <!--<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>-->
+    <Description>Provides natively sized (64 bit on x64 and ARM64, 32 bit on x86 and ARM) collections.</Description>
+    <PackageTags>NativeArray;LargeArray;native-array;large-array;x64;64-bit</PackageTags>
 
     <!-- The following is recommended for public projects -->
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -17,12 +21,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\LICENSE" Pack="true" PackagePath=""/>
+    <None Include="..\LICENSE" Pack="true" PackagePath="" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Bcl.HashCode" Version="1.1.1" />
     <!-- The following is recommended for public projects -->
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    <!--<PackageReference Include="Microsoft.Toolkit.HighPerformance" Version="6.1.1" />-->
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="5.0.0" />
   </ItemGroup>
 
 </Project>

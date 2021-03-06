@@ -7,7 +7,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>Memory</RootNamespace>
+    <RootNamespace>LostTech.LargeCollections</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\LostTech.Memory.csproj" />
+    <ProjectReference Include="..\src\LostTech.LargeCollections.csproj" />
   </ItemGroup>
 
 </Project>
