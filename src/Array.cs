@@ -10,22 +10,22 @@ namespace LostTech.LargeCollections
     {
         private T* _buffer;
         /// <summary>Number of elements in the array</summary>
-        public nuint Length { get; }
+        public nint Length { get; }
 
-        public Array(nuint length)
+        public Array(nint length)
         {
             if (length == 0) return;
-            if (length == unchecked((nuint)(-1)))
+            if (length < 0)
                 throw new ArgumentOutOfRangeException(nameof(length));
 
-            long size = checked(Marshal.SizeOf<T>() * (nint)length);
+            long size = checked(Marshal.SizeOf<T>() * length);
             _buffer = (T*)Marshal.AllocHGlobal((IntPtr)size);
             Length = length;
             GC.AddMemoryPressure(size);
         }
         // TODO: currently, the buffer is assumed to be owned by the instance,
         // and it will be disposed using Marshal.FreeHGlobal.
-        internal Array(T* buffer, nuint length)
+        internal Array(T* buffer, nint length)
         {
             _buffer = buffer;
             Length = length;
@@ -44,7 +44,7 @@ namespace LostTech.LargeCollections
         /// Accessing invalid reference is undefined behavior.
         /// </para>
         /// </summary>
-        public ref T UnsafeRef(nuint index) => ref Unsafe.AsRef<T>(_buffer + index);
+        public ref T UnsafeRef(nint index) => ref Unsafe.AsRef<T>(_buffer + index);
         /// <summary>
         /// Returns a reference, that points to the element at the specified index.
         ///
@@ -58,16 +58,18 @@ namespace LostTech.LargeCollections
         /// Accessing invalid reference is undefined behavior.
         /// </para>
         /// </summary>
-        public ref T UnsafeRef(NIndex index) => ref Unsafe.AsRef<T>(_buffer + index.GetOffset(Length));
+        public ref T UnsafeRef(Index<nint> index) => ref Unsafe.AsRef<T>(_buffer + index.GetOffset(Length));
 
         /// <summary>
         /// Gets or sets element at the specified index. Checks bounds.
         /// </summary>
-        public T this[nuint index]
+        public T this[nint index]
         {
             get
             {
-                if (index >= Length) throw new IndexOutOfRangeException();
+#pragma warning disable CA1065 // Do not raise exceptions in unexpected locations
+                if (index >= Length || index < 0) throw new IndexOutOfRangeException();
+#pragma warning restore CA1065 // Do not raise exceptions in unexpected locations
                 if (_buffer == null) throw new ObjectDisposedException("Array");
 
                 return UnsafeRef(index);
@@ -75,7 +77,7 @@ namespace LostTech.LargeCollections
 
             set
             {
-                if (index >= Length) throw new IndexOutOfRangeException();
+                if (index >= Length || index < 0) throw new IndexOutOfRangeException();
                 if (_buffer == null) throw new ObjectDisposedException("Array");
 
                 UnsafeRef(index) = value;
@@ -84,7 +86,7 @@ namespace LostTech.LargeCollections
         /// <summary>
         /// Gets or sets element at the specified index. Checks bounds.
         /// </summary>
-        public T this[NIndex index]
+        public T this[Index<nint> index]
         {
             get => this[index.GetOffset(Length)];
             set => this[index.GetOffset(Length)] = value;
@@ -107,7 +109,7 @@ namespace LostTech.LargeCollections
         /// <inheritdoc/>
         public IEnumerator<T> GetEnumerator()
         {
-            for (nuint index = 0; index < Length; index++)
+            for (nint index = 0; index < Length; index++)
             {
                 yield return UnsafeRef(index);
             }
